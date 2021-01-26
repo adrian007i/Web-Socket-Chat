@@ -5,17 +5,13 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var mongoose = require('mongoose');
 
-
-
-
 app.use(express.static(__dirname));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false })); 
 
-//index route
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
+const dbUrl = "mongodb+srv://adrian007i:Password101!@cluster0.yliji.mongodb.net/chat-app?retryWrites=true&w=majority";
+var Message = mongoose.model('Message', { name: String, message: String, time: String }); 
+
 
 //get messages
 app.get('/messages', (req, res) => {
@@ -31,29 +27,24 @@ app.post('/sendmessages', (req, res) => {
     if (err)
       res.sendStatus(500);
     else{
-      res.sendStatus(200);
       io.emit('message', req.body);
+      res.sendStatus(200);
     }   
   })
 })
 
 //websocket connection
-io.on('connection', function(socket){
-  console.log('a user connected');
-      socket.on('disconnect', function(){
-      console.log('user disconnected');
-  });
-});
+io.on('connection', () =>{
+  console.log('a user is connected')
+})
 
 //Listening for connection
 const port = 8080;
-app.listen(port, () => {
-  console.log(`Server running on port:${port}`);
+var server = http.listen(port, () => {
+  console.log('server is running on port', server.address().port);
 });
 
 //Connecting to the mongo database
-const dbUrl = "mongodb+srv://adrian007i:Password101!@cluster0.yliji.mongodb.net/chat-app?retryWrites=true&w=majority";
-var Message = mongoose.model('Message', { name: String, message: String, time: String }); 
 mongoose.connect(dbUrl, {useNewUrlParser: true, useUnifiedTopology: true}, (err) => {
   if (err)
       console.error(err);
