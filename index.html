@@ -6,7 +6,7 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-	<script src="socketio.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
 </head>
 
 <body>
@@ -35,8 +35,8 @@
 	</div>
 
 	<script>
-		var socket = io.connect('http://adrian-ubuntu-server.eastus.cloudapp.azure.com:8080');
-		socket.on('messages', addMessages);
+		var socket = io();
+		
 
 		$(() => {
 			$("#ChatForm").submit(() => {
@@ -52,6 +52,8 @@
 			})
 			getMessages()
 		})
+
+		socket.on('message', addMessages)
 
 		function addMessages(message) {
 			$("#messages").append(`
@@ -69,8 +71,6 @@
 		function sendMessage(message) {
 			$.post('/sendmessages', message)
 		}
-
-
 	</script>
 </body>
 
