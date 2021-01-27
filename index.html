@@ -7,39 +7,68 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
+
+	<!-- Styles for Chat -->
+	<style>
+		#msg_container {
+			border-radius: 10px;
+			border: 1px solid white;
+			background-color: lightgrey;
+			width: 500px;
+			padding: 5px;
+			margin: auto;
+		}
+
+		#messages {
+			height: 90vh;
+			overflow-y: scroll;
+		}
+
+		#ChatForm {
+			margin: auto;
+		}
+
+		body {
+			background-color: rgb(54, 51, 51);
+		}
+	</style>
 </head>
 
-<body>
-	<div class="container">
+<body> 
+	<div class="container-fluid">
 		<br>
 
-		<div class="jumbotron">
-			<form id="ChatForm">
-				<h1 class="display-4">Web socket chat</h1>
-				<br>
-
-				<input id="name" class="form-control" placeholder="Name" required>
-				<br>
-
-				<textarea id="message" class="form-control" placeholder="Your Message Here" required></textarea>
-				<br>
-
-				<button type="submit" id="send" class="btn btn-success">Send</button>
-			</form>
-		</div>
-
-
-
+		<!-- Messages -->
 		<div id="messages">
 		</div>
+
+		<!-- Chat Form -->
+		<form id="ChatForm" class='fixed-bottom'>
+			<div class="form-row">
+				<div class="col-sm-2"></div>
+				<div class="col-sm-2">
+					<input id="name" class="form-control" placeholder="Name" required>
+				</div>
+				<div class="col-sm-6">
+					<input id="message" class="form-control" placeholder="Your Message Here" required>
+				</div>
+				<div class="col-sm-2">
+					<button type="submit" id="send" class="btn btn-success">Send</button>
+				</div>
+				<div class="col-sm-2"></div>
+
+			</div>
+		</form>
 	</div>
 
 	<script>
 		var socket = io();
-		
 
 		$(() => {
+			//on submit of entering a new message
 			$("#ChatForm").submit(() => {
+
+				//gets and format the date and time
 				var d = new Date();
 				d = new Date(d.getTime() - 3000000);
 				var date_format_str = d.getFullYear().toString() + "-" + ((d.getMonth() + 1).toString().length == 2 ? (d.getMonth() + 1).toString() : "0" + (d.getMonth() + 1).toString()) + "-" + (d.getDate().toString().length == 2 ? d.getDate().toString() : "0" + d.getDate().toString()) + " " + (d.getHours().toString().length == 2 ? d.getHours().toString() : "0" + d.getHours().toString()) + ":" + ((parseInt(d.getMinutes() / 5) * 5).toString().length == 2 ? (parseInt(d.getMinutes() / 5) * 5).toString() : "0" + (parseInt(d.getMinutes() / 5) * 5).toString()) + ":00";
@@ -53,23 +82,42 @@
 			getMessages()
 		})
 
+
 		socket.on('message', addMessages)
 
+		//append the message to the #messages div
 		function addMessages(message) {
+
 			$("#messages").append(`
-				<h4> ${message.name} </h4>
-				<span style='font-weight:bold; color:green;'> ${message.time}  --   </span>
-				<span>  ${message.message} </span>`)
+				<div id='msg_container'>
+					<b style="color:${getDarkColor()};"> ${message.name} </b>
+					<span> -- ${message.message} </span></br>
+					<small > ${message.time}     </small>
+				</div>
+				</br>
+				`)
 		}
 
+		// get a list of all messages in the database
 		function getMessages() {
 			$.get('/messages', (data) => {
 				data.forEach(addMessages);
+				$("#messages").scrollTop($('#messages')[0].scrollHeight)
 			})
 		}
 
+		// Make post request in index.js
 		function sendMessage(message) {
 			$.post('/sendmessages', message)
+		}
+
+		//generate random color for the user names
+		function getDarkColor() {
+			var color = '#';
+			for (var i = 0; i < 6; i++) {
+				color += Math.floor(Math.random() * 10);
+			}
+			return color;
 		}
 	</script>
 </body>
