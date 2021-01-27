@@ -26,13 +26,5 @@ Simple real time chat application using websockets with NodeJS.
   5) run node index.js
     
 
-## Environment:
-This application uses the following open source packages:  
-* [MongoDB](https://www.mongodb.com/)
-* [React](https://reactjs.org/)
-* [Sass](https://sass-lang.com/)
-* [jQuery](https://jquery.com/)
-* [Grunt](https://gruntjs.com/)
-NodeJs Server
 
 
