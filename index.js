@@ -1,15 +1,15 @@
+require('dotenv').config();
 var express = require('express');
 var bodyParser = require('body-parser')
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var mongoose = require('mongoose');
+var mongoose = require('mongoose'); 
 
 app.use(express.static(__dirname));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false })); 
-
-const dbUrl = "mongodb+srv://adrian007i:Password101!@cluster0.yliji.mongodb.net/chat-app?retryWrites=true&w=majority";
+const dbUrl = "mongodb+srv://"+process.env.DBUSER+":"+process.env.DBPASSWORD+"@"+process.env.HOST+"/chat-app?retryWrites=true&w=majority";
 var Message = mongoose.model('Message', { name: String, message: String, time: String }); 
 
 
