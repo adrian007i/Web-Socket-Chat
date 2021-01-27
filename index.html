@@ -47,7 +47,7 @@
 			<div class="form-row">
 				<div class="col-sm-2"></div>
 				<div class="col-sm-2">
-					<input id="name" class="form-control" placeholder="Name" required>
+					<input id="name" class="form-control" placeholder="Name" onchange="updateLocalStorage()" required>
 				</div>
 				<div class="col-sm-6">
 					<input id="message" class="form-control" placeholder="Your Message Here" required>
@@ -63,7 +63,10 @@
 
 	<script>
 		var socket = io();
+		if(localStorage.getItem("username"))
+			$("#name").val(localStorage.getItem("username"));
 
+		
 		$(() => {
 			//on submit of entering a new message
 			$("#ChatForm").submit(() => {
@@ -119,6 +122,10 @@
 				color += Math.floor(Math.random() * 10);
 			}
 			return color;
+		}
+	
+		function updateLocalStorage(){
+			localStorage.setItem("username",$("#name").val());
 		}
 	</script>
 </body>
