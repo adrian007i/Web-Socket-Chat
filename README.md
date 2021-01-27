@@ -20,9 +20,9 @@ Simple real time chat application using websockets with NodeJS.
   2) Go into the application directory - cd Web-Socket-Chat
   3) Install the Node packages - npm install
   4) Create a file called .env and store your db creds in there; e.g
-    HOST=cluster0.yliji.mongodb.net
-    DBUSER=adrian007i
-    DBPASSWORD=Password101!
+    -HOST=cluster0.yliji.mongodb.net
+    - DBUSER=adrian007i
+    - DBPASSWORD=Password101!
   5) run node index.js
     
 ## Demo 
