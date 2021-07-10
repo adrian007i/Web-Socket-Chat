@@ -24,8 +24,6 @@ Simple real time chat application using websockets with NodeJS.
     - DBUSER=testuserbilly
     - DBPASSWORD=password
   5) run node index.js
-    
-## Demo 
-http://adrian-ubuntu-server.eastus.cloudapp.azure.com:8080/
+     
 
 
